@@ -1,14 +1,16 @@
 describe('TODO api testing', () => {
+    let todoItem;
     it('fetches Todo items - GET', () => {
         cy.request('/todos/').as('todoRequest');
         cy.get('@todoRequest').then(todos => {
             expect(todos.status).to.eq(200);
             assert.isArray(todos.body, 'Todos Response is an array')
+            todoItem = todos.body[0]._id
         });
     });
 
     it('deletes Todo items - DELETE', () => {
-        cy.request('DELETE', '/todos/9').as('todoRequest');
+        cy.request('DELETE', `/todos/${todoItem}`).as('todoRequest');
         // deletes Todo item with id = 9
         cy.get('@todoRequest').then(todos => {
             expect(todos.status).to.eq(200);
